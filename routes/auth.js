@@ -17,7 +17,7 @@ router.post('/signup', (req, res) => {
     const { name, email, password } = req.body
     console.log(name, email, password)
     if (!email || !password || !name) {
-        return res.status(422).json({ error: 'please add all fields pppp' })
+        return res.status(422).json({ error: 'Please add all fields ' })
     }
     User.findOne({ email: email })
         .then((savedUser) => {
@@ -37,7 +37,9 @@ router.post('/signup', (req, res) => {
 
                     user.save()
                         .then(user => {
-                            res.json({ message: 'saved successfully ' })
+                            res.json({
+                                message: 'Saved Successfully '
+                            })
                         })
                         .catch(err => {
                             console.log(err);
@@ -68,7 +70,12 @@ router.post('/signin', (req, res) => {
                     if (doMatch) {
                         // res.json({ message: 'successfully signed in' })
                         const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET)
-                        res.json({ token })
+                        const { _id, name, email } = savedUser
+                        res.json({
+                            token, user: {
+                                _id, name, email
+                            }, message: "logged in successfully"
+                        })
                     }
 
                     else {
